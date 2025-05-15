@@ -13,5 +13,9 @@ router.register(r'tickets', views.TicketViewSet)
 router.register(r'exhibits', views.ExhibitViewSet)
 
 urlpatterns = [
+    path('auth/register/', views.RegisterView.as_view(), name='register'),
+    path('auth/login/', views.LoginView.as_view(), name='login'),
+    path('auth/logout/', views.LogoutView.as_view(), name='logout'),
+    path('auth/check/', views.CheckAuthView.as_view(), name='check_auth'),
     path('', include(router.urls)),
 ] 

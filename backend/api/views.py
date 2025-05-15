@@ -8,6 +8,12 @@ from .serializers import (
     UserSerializer, CategorySerializer, LocationSerializer, EventSerializer,
     AuthorSerializer, TicketTypeSerializer, TicketSerializer, ExhibitSerializer
 )
+from django.contrib.auth import authenticate, login, logout
+from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
+from rest_framework.authtoken.models import Token
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 
 # Create your views here.
 
@@ -82,3 +88,47 @@ class ExhibitViewSet(viewsets.ModelViewSet):
         exhibits = Exhibit.objects.filter(category_id=category_id)
         serializer = self.get_serializer(exhibits, many=True)
         return Response(serializer.data)
+
+class RegisterView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        data = request.data
+        required_fields = ['username', 'email', 'password', 'first_name', 'last_name']
+        for field in required_fields:
+            if not data.get(field):
+                return Response({'error': f'Поле {field} обязательно'}, status=400)
+        if data.get('password') != data.get('password2'):
+            return Response({'error': 'Пароли не совпадают'}, status=400)
+        if User.objects.filter(username=data['username']).exists():
+            return Response({'error': 'Пользователь с таким именем уже существует'}, status=400)
+        user = User.objects.create_user(
+            username=data['username'],
+            email=data['email'],
+            password=data['password'],
+            first_name=data['first_name'],
+            last_name=data['last_name'],
+            middle_name=data.get('middle_name', '')
+        )
+        return Response({'success': True})
+
+class LoginView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        username = request.data.get('username')
+        password = request.data.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return Response({'success': True})
+        return Response({'error': 'Неверные имя пользователя или пароль'}, status=400)
+
+class LogoutView(APIView):
+    def post(self, request):
+        logout(request)
+        return Response({'success': True})
+
+class CheckAuthView(APIView):
+    def get(self, request):
+        return Response({'isAuthenticated': request.user.is_authenticated})
