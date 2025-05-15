@@ -3,48 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Палеонтологический музей им. Ю.А. Орлова</title>
+    <title>Палеонтологический музей</title>
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
     <header>
         <nav>
             <div class="logo">
-                <h1>Палеонтологический музей</h1>
-                <p>им. Ю.А. Орлова</p>
+                <a href="/">Палеонтологический музей</a>
             </div>
-            <ul class="nav-links">
-                <li><a href="/">Главная</a></li>
-                <li><a href="/exhibits">Экспонаты</a></li>
-                <li><a href="/events">События</a></li>
-                <li><a href="/tickets">Билеты</a></li>
-                <li><a href="/about">О музее</a></li>
-            </ul>
+            <div class="nav-links">
+                <a href="/" class="active">Главная</a>
+                <a href="/exhibits">Экспонаты</a>
+                <a href="/events">События</a>
+                <a href="/tickets">Билеты</a>
+                <a href="/about">О музее</a>
+            </div>
             <div class="auth-buttons">
-                <button id="loginBtn">Войти</button>
-                <button id="registerBtn">Регистрация</button>
+                <button onclick="window.location.href='/login'" class="auth-button">Войти</button>
+                <button onclick="window.location.href='/register'" class="auth-button">Регистрация</button>
             </div>
         </nav>
     </header>
 
     <main>
         <section class="hero">
-            <h2>Добро пожаловать в мир древних существ</h2>
+            <h1>Добро пожаловать в мир древних существ</h1>
             <p>Исследуйте удивительный мир палеонтологии вместе с нами</p>
-            <button class="cta-button">Купить билет</button>
+            <a href="/tickets" class="cta-button">Купить билет</a>
         </section>
 
-        <section class="featured-exhibits">
-            <h2>Популярные экспонаты</h2>
-            <div class="exhibits-grid" id="featuredExhibits">
-                <!-- Экспонаты будут добавлены через JavaScript -->
+        <section class="features">
+            <div class="feature">
+                <h2>Экспонаты</h2>
+                <p>Уникальная коллекция окаменелостей и реконструкций</p>
+                <a href="/exhibits" class="feature-link">Подробнее</a>
             </div>
-        </section>
-
-        <section class="upcoming-events">
-            <h2>Ближайшие события</h2>
-            <div class="events-grid" id="upcomingEvents">
-                <!-- События будут добавлены через JavaScript -->
+            <div class="feature">
+                <h2>События</h2>
+                <p>Лекции, экскурсии и специальные выставки</p>
+                <a href="/events" class="feature-link">Подробнее</a>
+            </div>
+            <div class="feature">
+                <h2>Билеты</h2>
+                <p>Купите билеты онлайн и посетите музей</p>
+                <a href="/tickets" class="feature-link">Подробнее</a>
             </div>
         </section>
     </main>
@@ -53,9 +56,8 @@
         <div class="footer-content">
             <div class="footer-section">
                 <h3>Контакты</h3>
-                <p>Адрес: [Адрес музея]</p>
-                <p>Телефон: [Телефон]</p>
-                <p>Email: [Email]</p>
+                <p>Телефон: +7 (123) 456-78-90</p>
+                <p>Email: info@museum.ru</p>
             </div>
             <div class="footer-section">
                 <h3>Часы работы</h3>
@@ -63,19 +65,16 @@
                 <p>Сб-Вс: 10:00 - 20:00</p>
             </div>
             <div class="footer-section">
-                <h3>Социальные сети</h3>
+                <h3>Мы в соцсетях</h3>
                 <div class="social-links">
                     <a href="#">VK</a>
                     <a href="#">Telegram</a>
-                    <a href="#">Instagram</a>
+                    <a href="#">YouTube</a>
                 </div>
             </div>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 Палеонтологический музей им. Ю.А. Орлова. Все права защищены.</p>
-        </div>
     </footer>
 
-    <script src="/static/js/main.js"></script>
+    <script src="/static/js/auth.js"></script>
 </body>
 </html> 
