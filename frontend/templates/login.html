@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход - Палеонтологический музей</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/auth.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="/">Палеонтологический музей</a>
+            </div>
+            <div class="nav-links">
+                <a href="/">Главная</a>
+                <a href="/exhibits">Экспонаты</a>
+                <a href="/events">События</a>
+                <a href="/tickets">Билеты</a>
+                <a href="/about">О музее</a>
+            </div>
+            <div class="auth-buttons">
+                <button onclick="window.location.href='/login'" class="auth-button active">Войти</button>
+                <button onclick="window.location.href='/register'" class="auth-button">Регистрация</button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="auth-page">
+        <div class="auth-container">
+            <h2>Вход в аккаунт</h2>
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <label for="username">Имя пользователя</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Пароль</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="auth-button">Войти</button>
+            </form>
+            <div class="auth-link">
+                Нет аккаунта? <a href="/register">Зарегистрироваться</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Контакты</h3>
+                <p>Телефон: +7 (123) 456-78-90</p>
+                <p>Email: info@museum.ru</p>
+            </div>
+            <div class="footer-section">
+                <h3>Часы работы</h3>
+                <p>Пн-Пт: 10:00 - 18:00</p>
+                <p>Сб-Вс: 10:00 - 20:00</p>
+            </div>
+            <div class="footer-section">
+                <h3>Мы в соцсетях</h3>
+                <div class="social-links">
+                    <a href="#">VK</a>
+                    <a href="#">Telegram</a>
+                    <a href="#">YouTube</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/static/js/auth.js"></script>
+</body>
+</html> 
