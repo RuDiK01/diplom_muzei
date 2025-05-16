@@ -2,6 +2,13 @@
 let allEvents = [];
 let currentEventType = 'all';
 
+// Сопоставление data-type с русскими названиями типов событий
+const eventTypeMap = {
+    'lecture': 'Лекция',
+    'excursion': 'Экскурсия',
+    'exhibition': 'Выставка',
+};
+
 // Загрузка событий
 async function loadEvents() {
     try {
@@ -61,11 +68,30 @@ function filterEventsByType(type) {
     });
 
     // Фильтрация событий
-    const filteredEvents = type === 'all' 
-        ? allEvents 
-        : allEvents.filter(event => event.event_type === type);
-    
+    let filteredEvents;
+    if (type === 'all') {
+        filteredEvents = allEvents;
+    } else {
+        const ruType = eventTypeMap[type];
+        filteredEvents = allEvents.filter(event => event.event_type === ruType);
+    }
     displayEvents(filteredEvents);
+}
+
+// Получение CSRF-токена из cookie
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
 }
 
 // Показ деталей события
@@ -96,11 +122,13 @@ async function showEventDetails(eventId) {
         if (registerBtn) {
             registerBtn.addEventListener('click', async () => {
                 try {
+                    const csrftoken = getCookie('csrftoken');
                     const regResponse = await fetch(`/api/events/${event.id}/register/`, {
                         method: 'POST',
                         credentials: 'include',
                         headers: {
                             'Content-Type': 'application/json',
+                            'X-CSRFToken': csrftoken,
                         },
                     });
                     if (regResponse.status === 401) {

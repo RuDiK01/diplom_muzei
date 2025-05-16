@@ -28,12 +28,32 @@ function updateAuthUI(isAuthenticated) {
     }
 }
 
+// Получение CSRF-токена из cookie
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 // Функция для выхода
 async function logout() {
     try {
+        const csrftoken = getCookie('csrftoken');
         const response = await fetch('/api/auth/logout/', {
             method: 'POST',
-            credentials: 'include'
+            credentials: 'include',
+            headers: {
+                'X-CSRFToken': csrftoken,
+            }
         });
         if (response.ok) {
             window.location.href = '/';

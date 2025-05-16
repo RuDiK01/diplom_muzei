@@ -189,6 +189,7 @@ class LoginView(APIView):
             })
         return Response({'error': 'Неверные имя пользователя или пароль'}, status=400)
 
+@method_decorator(csrf_exempt, name='dispatch')
 class LogoutView(APIView):
     def post(self, request):
         logout(request)
