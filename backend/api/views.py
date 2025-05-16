@@ -121,8 +121,25 @@ class EventRegisterView(APIView):
         user = request.user
         if EventRegistration.objects.filter(user=user, event=event).exists():
             return Response({'error': 'Вы уже зарегистрированы на это событие.'}, status=status.HTTP_400_BAD_REQUEST)
+        # Проверка ticket_type и цены
+        if not event.ticket_type:
+            return Response({'error': 'У события не задан тип билета.'}, status=status.HTTP_400_BAD_REQUEST)
+        price = event.ticket_type.price
+        if user.balance < price:
+            return Response({'error': 'Недостаточно средств на балансе.'}, status=status.HTTP_400_BAD_REQUEST)
+        # Списание баланса
+        user.balance -= price
+        user.save()
+        # Создание билета
+        Ticket.objects.create(
+            ticket_type=event.ticket_type,
+            user=user,
+            visit_date=event.start_date,
+            price=price
+        )
+        # Регистрация на событие
         reg = EventRegistration.objects.create(user=user, event=event)
-        return Response({'success': True, 'message': 'Вы успешно зарегистрированы на событие.'})
+        return Response({'success': True, 'message': 'Вы успешно зарегистрированы на событие и билет куплен.', 'price': float(price), 'balance': float(user.balance)})
 
 class RegisterView(APIView):
     permission_classes = [AllowAny]

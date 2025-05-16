@@ -31,4 +31,5 @@ urlpatterns = [
     path('login/', TemplateView.as_view(template_name='login.html')),
     path('register/', TemplateView.as_view(template_name='register.html')),
     path('admin-panel/', TemplateView.as_view(template_name='admin_panel.html')),
+    path('profile/', TemplateView.as_view(template_name='profile.html')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

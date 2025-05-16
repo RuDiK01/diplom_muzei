@@ -10,6 +10,7 @@ class User(AbstractUser):
         default='User'
     )
     date_registration = models.DateField(auto_now_add=True)
+    balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     
     # Добавляем related_name для решения конфликта
     groups = models.ManyToManyField(
@@ -66,6 +67,7 @@ class Event(models.Model):
     image = models.ImageField(upload_to='events/', blank=True, null=True)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
     event_type = models.CharField(max_length=50, choices=EVENT_TYPES)
+    ticket_type = models.ForeignKey('TicketType', on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
         db_table = 'Event'

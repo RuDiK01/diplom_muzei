@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Экспонаты - Палеонтологический музей</title>
+    <title>Профиль - Палеонтологический музей</title>
     <link rel="stylesheet" href="/static/css/style.css">
-    <link rel="stylesheet" href="/static/css/exhibits.css">
+    <link rel="stylesheet" href="/static/css/profile.css">
 </head>
 <body>
     <header>
@@ -15,9 +15,9 @@
             </div>
             <div class="nav-links">
                 <a href="/">Главная</a>
-                <a href="/exhibits" class="active">Экспонаты</a>
+                <a href="/exhibits">Экспонаты</a>
                 <a href="/events">События</a>
-                <a href="/profile">Профиль</a>
+                <a href="/profile" class="active">Профиль</a>
                 <a href="/about">О музее</a>
             </div>
             <div class="auth-buttons">
@@ -27,36 +27,29 @@
         </nav>
     </header>
 
-    <main class="exhibits-page">
-        <h1>Экспонаты музея</h1>
-        
-        <div class="exhibits-container">
-            <aside class="filters">
-                <div class="filter-group">
-                    <h3>Категории</h3>
-                    <div id="categoryFilters"></div>
-                </div>
-                <div class="filter-group">
-                    <h3>Эры</h3>
-                    <div id="eraFilters"></div>
-                </div>
-            </aside>
-
-            <div class="exhibits-content">
-                <div class="search-bar">
-                    <input type="text" id="searchInput" placeholder="Поиск экспонатов...">
-                </div>
-                <div id="exhibitsGrid" class="exhibits-grid"></div>
+    <main class="profile-page page-padding">
+        <h1>Профиль пользователя</h1>
+        <div class="profile-info">
+            <div class="user-info">
+                <h2>Личная информация</h2>
+                <p><b>Имя:</b> <span id="profileName">...</span></p>
+                <p><b>Email:</b> <span id="profileEmail">...</span></p>
+                <p><b>Дата регистрации:</b> <span id="profileDate">...</span></p>
+            </div>
+            <div class="balance-section">
+                <h2>Баланс</h2>
+                <p><b>Текущий баланс:</b> <span id="profileBalance">0</span> ₽</p>
+                <input type="number" id="addBalanceInput" min="1" placeholder="Сумма пополнения">
+                <button id="addBalanceBtn">Пополнить баланс</button>
             </div>
         </div>
-    </main>
-
-    <div id="exhibitModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <div id="exhibitDetails"></div>
+        <div class="active-events">
+            <h2>Активные события</h2>
+            <ul id="activeEventsList">
+                <li>Нет купленных событий</li>
+            </ul>
         </div>
-    </div>
+    </main>
 
     <footer>
         <div class="footer-content">
@@ -81,7 +74,7 @@
         </div>
     </footer>
 
+    <script src="/static/js/profile.js"></script>
     <script src="/static/js/auth.js"></script>
-    <script src="/static/js/exhibits.js"></script>
 </body>
 </html> 

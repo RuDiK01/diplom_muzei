@@ -1,0 +1,52 @@
+/* Стили для страницы профиля */
+.profile-page {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    padding: 32px 24px;
+    margin-top: 130px;
+}
+.profile-info {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+}
+.user-info, .balance-section {
+    flex: 1 1 250px;
+    background: #f7f7f7;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 16px;
+}
+.user-info h2, .balance-section h2, .active-events h2 {
+    margin-top: 0;
+}
+.balance-section input[type="number"] {
+    width: 120px;
+    padding: 6px;
+    margin-right: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+.balance-section button {
+    padding: 6px 16px;
+    border: none;
+    background: #ff9800;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.balance-section button:hover {
+    background: #e68900;
+}
+.active-events ul {
+    list-style: disc inside;
+    padding-left: 0;
+}
+.active-events li {
+    margin-bottom: 6px;
+} 
