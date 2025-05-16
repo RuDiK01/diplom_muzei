@@ -1,3 +1,43 @@
+// Функция для обновления баланса в профиле
+async function updateProfileBalance() {
+    try {
+        const resp = await fetch('/api/auth/check/', { credentials: 'include' });
+        const data = await resp.json();
+        if (data.isAuthenticated && data.user && typeof data.user.balance !== 'undefined') {
+            document.getElementById('profileBalance').textContent = data.user.balance;
+        }
+    } catch (e) {}
+}
+
+// Функция для пополнения баланса через API
+async function addBalance(amount) {
+    try {
+        // Получаем id пользователя
+        const resp = await fetch('/api/auth/check/', { credentials: 'include' });
+        const data = await resp.json();
+        if (data.isAuthenticated && data.user) {
+            const userId = data.user.id;
+            // Делаем POST запрос на add_balance
+            const patchResp = await fetch(`/api/users/${userId}/add_balance/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify({ amount: amount })
+            });
+            if (patchResp.ok) {
+                await updateProfileBalance();
+                alert('Баланс успешно пополнен!');
+            } else {
+                alert('Ошибка при пополнении баланса');
+            }
+        }
+    } catch (e) {
+        alert('Ошибка при пополнении баланса');
+    }
+}
+
 // Загрузка информации о пользователе и активных событиях
 
 document.addEventListener('DOMContentLoaded', async function () {
@@ -35,35 +75,37 @@ document.addEventListener('DOMContentLoaded', async function () {
     document.getElementById('profileName').textContent = userInfo.first_name ? userInfo.first_name : '—';
     document.getElementById('profileEmail').textContent = userInfo.email ? userInfo.email : '—';
     document.getElementById('profileDate').textContent = userInfo.date_registration ? userInfo.date_registration : '—';
-    // Баланс — если появится на бэке, можно подгружать, пока оставим 0
-    document.getElementById('profileBalance').textContent = '0';
+    document.getElementById('profileBalance').textContent = userInfo.balance !== undefined ? userInfo.balance : '0';
 
     // Активные события
     const eventsList = document.getElementById('activeEventsList');
     eventsList.innerHTML = '';
-    if (events.length === 0) {
+    // Получаем зарегистрированные бесплатные события из localStorage
+    let registeredEvents = [];
+    try {
+        registeredEvents = JSON.parse(localStorage.getItem('registeredEvents')) || [];
+    } catch (e) {}
+    const allEvents = [...events];
+    registeredEvents.forEach(ev => {
+        if (!allEvents.some(e => e.name === ev.name && e.date === ev.date)) {
+            allEvents.push(ev);
+        }
+    });
+    if (allEvents.length === 0) {
         eventsList.innerHTML = '<li>Нет купленных событий</li>';
     } else {
-        events.forEach(ev => {
+        allEvents.forEach(ev => {
             const li = document.createElement('li');
             li.textContent = `${ev.name} — ${ev.date}`;
             eventsList.appendChild(li);
         });
     }
 
-    // Пополнение баланса (имитация)
+    // Пополнение баланса через API
     document.getElementById('addBalanceBtn').onclick = function () {
-        const input = document.getElementById('addBalanceInput');
-        const value = parseInt(input.value);
-        if (!isNaN(value) && value > 0) {
-            // Здесь должен быть реальный запрос на пополнение баланса
-            let current = parseInt(document.getElementById('profileBalance').textContent) || 0;
-            current += value;
-            document.getElementById('profileBalance').textContent = current;
-            input.value = '';
-            alert('Баланс успешно пополнен!');
-        } else {
-            alert('Введите корректную сумму');
-        }
+        alert('В разработке');
     };
-}); 
+});
+
+// Экспорт функции для обновления баланса (для использования в других скриптах)
+window.updateProfileBalance = updateProfileBalance; 

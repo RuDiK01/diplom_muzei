@@ -25,6 +25,21 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    @action(detail=True, methods=['post'])
+    @csrf_exempt
+    def add_balance(self, request, pk=None):
+        user = self.get_object()
+        amount = request.data.get('amount')
+        try:
+            amount = float(amount)
+            if amount <= 0:
+                return Response({'error': 'Некорректная сумма'}, status=status.HTTP_400_BAD_REQUEST)
+        except:
+            return Response({'error': 'Некорректная сумма'}, status=status.HTTP_400_BAD_REQUEST)
+        user.balance += amount
+        user.save()
+        return Response({'success': True, 'balance': float(user.balance)})
+
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
@@ -214,4 +229,9 @@ class LogoutView(APIView):
 
 class CheckAuthView(APIView):
     def get(self, request):
-        return Response({'isAuthenticated': request.user.is_authenticated})
+        if request.user.is_authenticated:
+            from .serializers import UserSerializer
+            user_data = UserSerializer(request.user).data
+            return Response({'isAuthenticated': True, 'user': user_data})
+        else:
+            return Response({'isAuthenticated': False})

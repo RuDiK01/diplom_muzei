@@ -132,6 +132,7 @@ async function showEventDetails(eventId) {
                     <p><b>Ваш баланс:</b> <span id="userBalance">${balance !== null ? balance + ' ₽' : '—'}</span></p>
                     <div id="eventRegisterMsg" style="color:red;margin-bottom:8px;"></div>
                     <button class="register-btn" data-event-id="${event.id}">Зарегистрироваться</button>
+                    <button class="register-free-btn" data-event-id="${event.id}">Зарегистрироваться бесплатно</button>
                 </div>
             </div>
         `;
@@ -163,6 +164,7 @@ async function showEventDetails(eventId) {
                         // Обновляем баланс
                         if (typeof regData.balance !== 'undefined') {
                             document.getElementById('userBalance').textContent = regData.balance + ' ₽';
+                            if (window.updateProfileBalance) window.updateProfileBalance();
                         }
                     } else {
                         msgDiv.style.color = 'red';
@@ -172,6 +174,28 @@ async function showEventDetails(eventId) {
                     const msgDiv = document.getElementById('eventRegisterMsg');
                     msgDiv.style.color = 'red';
                     msgDiv.textContent = 'Ошибка при регистрации на событие';
+                }
+            });
+        }
+
+        // Добавляем обработчик на кнопку бесплатной регистрации
+        const registerFreeBtn = details.querySelector('.register-free-btn');
+        if (registerFreeBtn) {
+            registerFreeBtn.addEventListener('click', function() {
+                // Добавить событие в registeredEvents и localStorage
+                window.registeredEvents = window.registeredEvents || [];
+                const regEvent = {
+                    id: event.id,
+                    name: event.name,
+                    date: formatDate(event.start_date)
+                };
+                // Проверка на дублирование
+                if (!window.registeredEvents.some(e => e.id === regEvent.id)) {
+                    window.registeredEvents.push(regEvent);
+                    localStorage.setItem('registeredEvents', JSON.stringify(window.registeredEvents));
+                    alert('Вы зарегистрированы на событие!');
+                } else {
+                    alert('Вы уже зарегистрированы на это событие!');
                 }
             });
         }

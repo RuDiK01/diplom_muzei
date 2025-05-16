@@ -4,7 +4,7 @@ from .models import User, Category, Location, Event, Author, TicketType, Ticket,
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'middle_name', 'role', 'date_registration']
+        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'middle_name', 'role', 'date_registration', 'balance']
         read_only_fields = ['date_registration']
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -17,22 +17,23 @@ class LocationSerializer(serializers.ModelSerializer):
         model = Location
         fields = '__all__'
 
+class TicketTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TicketType
+        fields = '__all__'
+
 class EventSerializer(serializers.ModelSerializer):
     location_name = serializers.CharField(source='location.name_location', read_only=True)
+    ticket_type = TicketTypeSerializer(read_only=True)
 
     class Meta:
         model = Event
         fields = ['id', 'name', 'description', 'start_date', 'end_date', 'image', 
-                 'location', 'location_name', 'event_type']
+                 'location', 'location_name', 'event_type', 'ticket_type']
 
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author
-        fields = '__all__'
-
-class TicketTypeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TicketType
         fields = '__all__'
 
 class TicketSerializer(serializers.ModelSerializer):

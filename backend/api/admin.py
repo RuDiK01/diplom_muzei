@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Event, Location, Exhibit, TicketType
+from .models import Event, Location, Exhibit, TicketType, User
 from django.utils.html import format_html
 
 @admin.register(Event)
@@ -39,6 +39,15 @@ class ExhibitAdmin(admin.ModelAdmin):
             return format_html('<img src="{}" style="max-height: 150px; max-width: 200px;" />', obj.image.url)
         return "(Нет изображения)"
     image_preview.short_description = "Превью изображения"
+
+@admin.register(User)
+class UserAdmin(admin.ModelAdmin):
+    list_display = ("username", "email", "first_name", "last_name", "balance", "role", "is_staff")
+    search_fields = ("username", "email", "first_name", "last_name")
+    list_filter = ("role", "is_staff")
+    fieldsets = (
+        (None, {"fields": ("username", "password", "email", "first_name", "last_name", "middle_name", "role", "balance", "is_staff", "is_active")}),
+    )
 
 # Можно зарегистрировать другие модели, если нужно
 admin.site.register(Location)
