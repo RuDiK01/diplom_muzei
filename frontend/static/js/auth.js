@@ -78,7 +78,12 @@ async function handleLogin(event) {
 
         const data = await response.json();
         if (response.ok) {
-            window.location.href = '/';
+            // Если админ — редирект на админ-панель
+            if (data.user && data.user.role === 'Admin') {
+                window.location.href = '/admin-panel/';
+            } else {
+                window.location.href = '/';
+            }
         } else {
             alert(data.error || 'Ошибка входа');
         }

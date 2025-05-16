@@ -1,0 +1,102 @@
+body {
+    background: #f8f9fa;
+}
+
+.admin-page {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    padding-top: 100px;
+}
+
+.admin-page h1 {
+    color: #2c3e50;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.07);
+    margin-bottom: 2rem;
+    overflow: hidden;
+}
+.admin-table th, .admin-table td {
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+.admin-table th {
+    background: #f3f3f3;
+    color: #2c3e50;
+    font-weight: 600;
+}
+.admin-table tr:last-child td {
+    border-bottom: none;
+}
+
+.admin-btn {
+    padding: 0.5rem 1.2rem;
+    background: #e67e22;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.2s;
+}
+.admin-btn:hover {
+    background: #d35400;
+}
+
+.admin-form {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.07);
+    margin-bottom: 2rem;
+    max-width: 600px;
+}
+.admin-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+    font-weight: 500;
+}
+.admin-form input, .admin-form textarea, .admin-form select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+}
+.admin-form input:focus, .admin-form textarea:focus, .admin-form select:focus {
+    outline: none;
+    border-color: #e67e22;
+}
+
+.admin-form .admin-btn {
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.admin-section-title {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    text-align: left;
+}
+
+@media (max-width: 768px) {
+    .admin-page {
+        padding: 1rem;
+        padding-top: 80px;
+    }
+    .admin-form {
+        padding: 1rem;
+    }
+} 

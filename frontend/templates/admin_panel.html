@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ-панель - Палеонтологический музей</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/admin_panel.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="/admin-panel/">Палеонтологический музей — Админ</a>
+            </div>
+            <div class="nav-links">
+                <a href="/admin-panel/" class="active">Главная</a>
+                <a href="#" id="categoriesNav">Категории</a>
+                <a href="#" id="exhibitsNav">Экспонаты</a>
+                <a href="#" id="eventsNav">События</a>
+            </div>
+            <div class="auth-buttons">
+                <button onclick="window.location.href='/'" class="auth-button">На сайт</button>
+                <button onclick="logout()" class="auth-button">Выйти</button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="admin-page page-padding">
+        <h1>Админ-панель музея</h1>
+        <div id="adminContent">
+            <!-- Контент будет подгружаться JS -->
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Контакты</h3>
+                <p>Телефон: +7 (123) 456-78-90</p>
+                <p>Email: info@museum.ru</p>
+            </div>
+            <div class="footer-section">
+                <h3>Часы работы</h3>
+                <p>Пн-Пт: 10:00 - 18:00</p>
+                <p>Сб-Вс: 10:00 - 20:00</p>
+            </div>
+            <div class="footer-section">
+                <h3>Мы в соцсетях</h3>
+                <div class="social-links">
+                    <a href="#">VK</a>
+                    <a href="#">Telegram</a>
+                    <a href="#">YouTube</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/static/js/auth.js"></script>
+    <script src="/static/js/admin_panel.js"></script>
+</body>
+</html> 
