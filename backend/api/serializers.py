@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Category, Location, Event, Author, TicketType, Ticket, Exhibit
+from .models import User, Category, Location, Event, Author, TicketType, Ticket, Exhibit, EventRegistration
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -56,4 +56,9 @@ class ExhibitSerializer(serializers.ModelSerializer):
                  'date_add', 'scientific_name', 'era', 'discovery_location']
 
     def get_author_name(self, obj):
-        return f"{obj.author.last_name} {obj.author.first_name}" 
+        return f"{obj.author.last_name} {obj.author.first_name}"
+
+class EventRegistrationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EventRegistration
+        fields = ['id', 'user', 'event', 'registered_at'] 

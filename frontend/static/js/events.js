@@ -86,10 +86,38 @@ async function showEventDetails(eventId) {
                     <p class="event-date">Дата: ${formatDate(event.start_date)} - ${formatDate(event.end_date)}</p>
                     <p class="event-location">Место: ${event.location_name}</p>
                     <p>${event.description || 'Описание отсутствует'}</p>
-                    <button class="register-btn">Зарегистрироваться</button>
+                    <button class="register-btn" data-event-id="${event.id}">Зарегистрироваться</button>
                 </div>
             </div>
         `;
+        
+        // Добавляем обработчик на кнопку регистрации
+        const registerBtn = details.querySelector('.register-btn');
+        if (registerBtn) {
+            registerBtn.addEventListener('click', async () => {
+                try {
+                    const regResponse = await fetch(`/api/events/${event.id}/register/`, {
+                        method: 'POST',
+                        credentials: 'include',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    });
+                    if (regResponse.status === 401) {
+                        alert('Пожалуйста, войдите в аккаунт, чтобы зарегистрироваться на событие.');
+                        return;
+                    }
+                    const regData = await regResponse.json();
+                    if (regResponse.ok) {
+                        alert('Вы успешно зарегистрированы на событие!');
+                    } else {
+                        alert(regData.error || 'Ошибка регистрации на событие');
+                    }
+                } catch (err) {
+                    alert('Ошибка при регистрации на событие');
+                }
+            });
+        }
         
         modal.style.display = 'block';
     } catch (error) {

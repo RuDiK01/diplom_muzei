@@ -1,0 +1,28 @@
+div.modern-page-navigation { 
+	padding: 0.5em 0; font-size: 90%; border: 1px solid #cdcdcd; border-left: none; border-right: none; overflow: hidden; margin-top: 20px}
+
+div.modern-page-navigation a, 
+span.modern-page-current, 
+span.modern-page-dots
+{
+	padding-left: 0.3em;
+	padding-right: 0.3em;
+	text-decoration: none;
+}
+div.modern-page-navigation a.modern-page-previous,
+div.modern-page-navigation a.modern-page-next { 
+
+	}
+
+div.modern-page-navigation a.modern-page-first, 
+div.modern-page-navigation span.modern-page-first { 
+	 }
+
+span.modern-page-current { 
+	font-weight: bold;
+background: #ccc; color: white }
+
+div.modern-page-navigation a, 
+span.modern-page-current, 
+span.modern-page-dots { 
+	 }

@@ -1,19 +1,22 @@
-from django.shortcuts import render
-from rest_framework import viewsets, permissions, status
+from django.shortcuts import render, get_object_or_404
+from rest_framework import viewsets, permissions, status, serializers
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.utils import timezone
-from .models import User, Category, Location, Event, Author, TicketType, Ticket, Exhibit
+from .models import User, Category, Location, Event, Author, TicketType, Ticket, Exhibit, EventRegistration
 from .serializers import (
     UserSerializer, CategorySerializer, LocationSerializer, EventSerializer,
-    AuthorSerializer, TicketTypeSerializer, TicketSerializer, ExhibitSerializer
+    AuthorSerializer, TicketTypeSerializer, TicketSerializer, ExhibitSerializer,
+    EventRegistrationSerializer
 )
 from django.contrib.auth import authenticate, login, logout
 from rest_framework.views import APIView
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.authtoken.models import Token
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
+from django.db import models
+from django.conf import settings
 
 # Create your views here.
 
@@ -88,6 +91,38 @@ class ExhibitViewSet(viewsets.ModelViewSet):
         exhibits = Exhibit.objects.filter(category_id=category_id)
         serializer = self.get_serializer(exhibits, many=True)
         return Response(serializer.data)
+
+    @action(detail=True, methods=['post'])
+    def upload_image(self, request, pk=None):
+        exhibit = self.get_object()
+        if 'image' not in request.FILES:
+            return Response(
+                {"error": "No image file provided"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        exhibit.image = request.FILES['image']
+        exhibit.save()
+        serializer = self.get_serializer(exhibit)
+        return Response(serializer.data)
+
+# Сериализатор
+class EventRegistrationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EventRegistration
+        fields = ['id', 'user', 'event', 'registered_at']
+
+# Вьюха для регистрации на событие
+class EventRegisterView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, pk):
+        event = get_object_or_404(Event, pk=pk)
+        user = request.user
+        if EventRegistration.objects.filter(user=user, event=event).exists():
+            return Response({'error': 'Вы уже зарегистрированы на это событие.'}, status=status.HTTP_400_BAD_REQUEST)
+        reg = EventRegistration.objects.create(user=user, event=event)
+        return Response({'success': True, 'message': 'Вы успешно зарегистрированы на событие.'})
 
 class RegisterView(APIView):
     permission_classes = [AllowAny]

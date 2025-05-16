@@ -8,8 +8,14 @@ fi
 # Активируем виртуальное окружение
 source venv/bin/activate
 
+# Обновляем pip
+pip install --upgrade pip
+
 # Устанавливаем зависимости
 pip install -r requirements.txt
+
+# Устанавливаем Pillow отдельно
+pip install --no-cache-dir Pillow
 
 # Применяем миграции
 cd backend

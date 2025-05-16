@@ -1,6 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from . import views
+from .views import EventRegisterView
 
 router = DefaultRouter()
 router.register(r'users', views.UserViewSet)
@@ -17,5 +18,6 @@ urlpatterns = [
     path('auth/login/', views.LoginView.as_view(), name='login'),
     path('auth/logout/', views.LogoutView.as_view(), name='logout'),
     path('auth/check/', views.CheckAuthView.as_view(), name='check_auth'),
+    path('events/<int:pk>/register/', EventRegisterView.as_view(), name='event-register'),
     path('', include(router.urls)),
 ] 

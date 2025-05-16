@@ -63,12 +63,14 @@ class Event(models.Model):
     description = models.TextField(blank=True, null=True)
     start_date = models.DateField()
     end_date = models.DateField()
-    image = models.CharField(max_length=100, blank=True, null=True)
+    image = models.ImageField(upload_to='events/', blank=True, null=True)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
     event_type = models.CharField(max_length=50, choices=EVENT_TYPES)
 
     class Meta:
         db_table = 'Event'
+        verbose_name = 'Событие'
+        verbose_name_plural = 'События'
 
     def __str__(self):
         return self.name
@@ -118,7 +120,7 @@ class Exhibit(models.Model):
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     description = models.TextField(blank=True, null=True)
-    image = models.CharField(max_length=100, blank=True, null=True)
+    image = models.ImageField(upload_to='exhibits/', blank=True, null=True)
     date_add = models.DateField(auto_now_add=True)
     scientific_name = models.CharField(max_length=255, blank=True, null=True)
     era = models.CharField(max_length=100, blank=True, null=True)
@@ -126,6 +128,17 @@ class Exhibit(models.Model):
 
     class Meta:
         db_table = 'Exhibit'
+        verbose_name = 'Экспонат'
+        verbose_name_plural = 'Экспонаты'
 
     def __str__(self):
         return self.name
+
+class EventRegistration(models.Model):
+    user = models.ForeignKey('User', on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    registered_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'event')
+        db_table = 'EventRegistration'
