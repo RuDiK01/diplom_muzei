@@ -103,4 +103,55 @@
 - При возникновении проблем с зависимостями попробуйте обновить pip:
   ```bash
   pip install --upgrade pip
-  ``` 
+  ```
+
+# Палеонтологический музей — запуск на Windows
+
+## 1. Установи Python
+- Скачай Python 3.10+ с официального сайта: https://www.python.org/downloads/windows/
+- При установке обязательно поставь галочку **"Add Python to PATH"**!
+
+## 2. Клонируй проект
+Открой командную строку (Win+R → cmd) и выполни:
+```sh
+git clone https://github.com/ТВОЙ_РЕПОЗИТОРИЙ/diplom_muzei.git
+cd diplom_muzei/backend
+```
+
+## 3. Создай виртуальное окружение
+```sh
+python -m venv venv
+venv\Scripts\activate
+```
+
+## 4. Установи зависимости
+```sh
+pip install -r requirements.txt
+```
+
+## 5. Применить миграции и создать суперпользователя
+```sh
+python manage.py migrate
+python manage.py createsuperuser
+```
+
+## 6. Запусти сервер
+```sh
+python manage.py runserver
+```
+
+## 7. Открой сайт
+- Перейди в браузере на http://127.0.0.1:8000/
+- Админка: http://127.0.0.1:8000/admin/
+
+---
+
+## Если не работает
+- Проверь, что активировано окружение (`venv` в начале строки)
+- Проверь, что все зависимости установлены (`pip install -r requirements.txt`)
+- Если порт занят — попробуй `python manage.py runserver 8001`
+- Если проблемы с миграциями — удали файл `db.sqlite3` и папку `__pycache__`, затем снова `migrate`
+
+---
+
+**Удачи! Если что — пиши!** 
