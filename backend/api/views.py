@@ -94,23 +94,41 @@ class RegisterView(APIView):
 
     def post(self, request):
         data = request.data
-        required_fields = ['username', 'email', 'password', 'first_name', 'last_name']
+        required_fields = ['username', 'email', 'password', 'password2', 'first_name', 'last_name']
+        
+        # Check required fields
         for field in required_fields:
             if not data.get(field):
                 return Response({'error': f'Поле {field} обязательно'}, status=400)
+        
+        # Validate passwords match
         if data.get('password') != data.get('password2'):
             return Response({'error': 'Пароли не совпадают'}, status=400)
+        
+        # Validate password strength
+        if len(data['password']) < 8:
+            return Response({'error': 'Пароль должен содержать минимум 8 символов'}, status=400)
+        
+        # Check if username exists
         if User.objects.filter(username=data['username']).exists():
             return Response({'error': 'Пользователь с таким именем уже существует'}, status=400)
-        user = User.objects.create_user(
-            username=data['username'],
-            email=data['email'],
-            password=data['password'],
-            first_name=data['first_name'],
-            last_name=data['last_name'],
-            middle_name=data.get('middle_name', '')
-        )
-        return Response({'success': True})
+        
+        # Check if email exists
+        if User.objects.filter(email=data['email']).exists():
+            return Response({'error': 'Пользователь с таким email уже существует'}, status=400)
+        
+        try:
+            user = User.objects.create_user(
+                username=data['username'],
+                email=data['email'],
+                password=data['password'],
+                first_name=data['first_name'],
+                last_name=data['last_name'],
+                middle_name=data.get('middle_name', '')
+            )
+            return Response({'success': True, 'message': 'Пользователь успешно зарегистрирован'})
+        except Exception as e:
+            return Response({'error': str(e)}, status=400)
 
 class LoginView(APIView):
     permission_classes = [AllowAny]
@@ -121,7 +139,19 @@ class LoginView(APIView):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return Response({'success': True})
+            token, _ = Token.objects.get_or_create(user=user)
+            return Response({
+                'success': True,
+                'token': token.key,
+                'user': {
+                    'id': user.id,
+                    'username': user.username,
+                    'email': user.email,
+                    'first_name': user.first_name,
+                    'last_name': user.last_name,
+                    'role': user.role
+                }
+            })
         return Response({'error': 'Неверные имя пользователя или пароль'}, status=400)
 
 class LogoutView(APIView):

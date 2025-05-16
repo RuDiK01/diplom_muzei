@@ -219,4 +219,10 @@ footer {
     .hero p {
         font-size: 1rem;
     }
+}
+
+.page-padding {
+    padding: 130px 2rem 2rem 2rem;
+    min-height: calc(100vh - 250px);
+    box-sizing: border-box;
 } 

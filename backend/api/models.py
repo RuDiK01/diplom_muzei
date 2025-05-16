@@ -107,7 +107,7 @@ class Ticket(models.Model):
     is_used = models.BooleanField(default=False)
 
     class Meta:
-        db_table = 'Tciket'
+        db_table = 'Ticket'
 
     def __str__(self):
         return f"Билет {self.id} - {self.ticket_type.name}"

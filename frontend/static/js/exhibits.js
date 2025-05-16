@@ -19,8 +19,13 @@ async function loadExhibits() {
 
 // Отображение экспонатов
 function displayExhibits(exhibits) {
-    const container = document.getElementById('exhibitsContainer');
+    const container = document.getElementById('exhibitsGrid');
     container.innerHTML = '';
+
+    if (exhibits.length === 0) {
+        container.innerHTML = '<div class="no-exhibits">Нет экспонатов для отображения.</div>';
+        return;
+    }
 
     exhibits.forEach(exhibit => {
         const card = createExhibitCard(exhibit);
