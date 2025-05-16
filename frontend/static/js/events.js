@@ -189,10 +189,15 @@ async function showEventDetails(eventId) {
                     name: event.name,
                     date: formatDate(event.start_date)
                 };
-                // Проверка на дублирование
-                if (!window.registeredEvents.some(e => e.id === regEvent.id)) {
-                    window.registeredEvents.push(regEvent);
-                    localStorage.setItem('registeredEvents', JSON.stringify(window.registeredEvents));
+                // Проверка на дублирование по id события
+                let stored = [];
+                try {
+                    stored = JSON.parse(localStorage.getItem('registeredEvents')) || [];
+                } catch (e) {}
+                if (!stored.some(e => e.id === regEvent.id)) {
+                    stored.push(regEvent);
+                    window.registeredEvents = stored;
+                    localStorage.setItem('registeredEvents', JSON.stringify(stored));
                     alert('Вы зарегистрированы на событие!');
                 } else {
                     alert('Вы уже зарегистрированы на это событие!');

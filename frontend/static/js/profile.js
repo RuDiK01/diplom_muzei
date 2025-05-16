@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     } catch (e) {}
     const allEvents = [...events];
     registeredEvents.forEach(ev => {
-        if (!allEvents.some(e => e.name === ev.name && e.date === ev.date)) {
+        if (!allEvents.some(e => e.id === ev.id)) {
             allEvents.push(ev);
         }
     });
