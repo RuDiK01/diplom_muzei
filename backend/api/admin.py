@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Event, Location, Exhibit
+from .models import Event, Location, Exhibit, TicketType
 from django.utils.html import format_html
 
 @admin.register(Event)
@@ -11,7 +11,7 @@ class EventAdmin(admin.ModelAdmin):
     
     fieldsets = (
         (None, {
-            "fields": ("name", "event_type", "description", "start_date", "end_date", "location", "image", "image_preview")
+            "fields": ("name", "event_type", "description", "start_date", "end_date", "location", "ticket_type", "image", "image_preview")
         }),
     )
 
@@ -42,3 +42,4 @@ class ExhibitAdmin(admin.ModelAdmin):
 
 # Можно зарегистрировать другие модели, если нужно
 admin.site.register(Location)
+admin.site.register(TicketType)

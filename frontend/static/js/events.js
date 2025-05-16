@@ -99,10 +99,26 @@ async function showEventDetails(eventId) {
     try {
         const response = await fetch(`/api/events/${eventId}/`);
         const event = await response.json();
-        
+
+        // Получаем баланс пользователя
+        let balance = null;
+        try {
+            const authResp = await fetch('/api/auth/check/', { credentials: 'include' });
+            const authData = await authResp.json();
+            if (authData.isAuthenticated && authData.user && typeof authData.user.balance !== 'undefined') {
+                balance = parseFloat(authData.user.balance);
+            }
+        } catch (e) {}
+
+        // Получаем цену билета
+        let ticketPrice = null;
+        if (event.ticket_type && event.ticket_type.price !== undefined) {
+            ticketPrice = parseFloat(event.ticket_type.price);
+        }
+
         const modal = document.getElementById('eventModal');
         const details = document.getElementById('eventDetails');
-        
+
         details.innerHTML = `
             <div class="event-details">
                 <img src="${event.image || '/static/images/default-event.jpg'}" alt="${event.name}">
@@ -112,11 +128,14 @@ async function showEventDetails(eventId) {
                     <p class="event-date">Дата: ${formatDate(event.start_date)} - ${formatDate(event.end_date)}</p>
                     <p class="event-location">Место: ${event.location_name}</p>
                     <p>${event.description || 'Описание отсутствует'}</p>
+                    <p><b>Цена билета:</b> ${ticketPrice !== null ? ticketPrice + ' ₽' : '—'}</p>
+                    <p><b>Ваш баланс:</b> <span id="userBalance">${balance !== null ? balance + ' ₽' : '—'}</span></p>
+                    <div id="eventRegisterMsg" style="color:red;margin-bottom:8px;"></div>
                     <button class="register-btn" data-event-id="${event.id}">Зарегистрироваться</button>
                 </div>
             </div>
         `;
-        
+
         // Добавляем обработчик на кнопку регистрации
         const registerBtn = details.querySelector('.register-btn');
         if (registerBtn) {
@@ -131,22 +150,32 @@ async function showEventDetails(eventId) {
                             'X-CSRFToken': csrftoken,
                         },
                     });
+                    const regData = await regResponse.json();
+                    const msgDiv = document.getElementById('eventRegisterMsg');
                     if (regResponse.status === 401) {
-                        alert('Пожалуйста, войдите в аккаунт, чтобы зарегистрироваться на событие.');
+                        msgDiv.style.color = 'red';
+                        msgDiv.textContent = 'Пожалуйста, войдите в аккаунт, чтобы зарегистрироваться на событие.';
                         return;
                     }
-                    const regData = await regResponse.json();
                     if (regResponse.ok) {
-                        alert('Вы успешно зарегистрированы на событие!');
+                        msgDiv.style.color = 'green';
+                        msgDiv.textContent = regData.message || 'Вы успешно зарегистрированы на событие!';
+                        // Обновляем баланс
+                        if (typeof regData.balance !== 'undefined') {
+                            document.getElementById('userBalance').textContent = regData.balance + ' ₽';
+                        }
                     } else {
-                        alert(regData.error || 'Ошибка регистрации на событие');
+                        msgDiv.style.color = 'red';
+                        msgDiv.textContent = regData.error || 'Ошибка регистрации на событие';
                     }
                 } catch (err) {
-                    alert('Ошибка при регистрации на событие');
+                    const msgDiv = document.getElementById('eventRegisterMsg');
+                    msgDiv.style.color = 'red';
+                    msgDiv.textContent = 'Ошибка при регистрации на событие';
                 }
             });
         }
-        
+
         modal.style.display = 'block';
     } catch (error) {
         console.error('Ошибка при загрузке деталей события:', error);
